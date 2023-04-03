@@ -30,22 +30,12 @@
     <!-- Todos container -->
     <div>
       <!-- Todo card show -->
-      <div
+      <TodoCard
         v-for="todo in todos"
         :key="todo.id"
-        class="flex items-center justify-between bg-gray-900 rounded-lg px-4 h-15 mb-2"
-      >
-        <div class="">
-          <input
-            class="bg-gray-900 placeholder-gray-700 text-slate-50 focus:outline-none block w-full appearance-none leading-normal pr-3 font-medium"
-            type="text"
-            v-model="todo.title"
-            @keyup.enter="updateTodo(todo)"
-          />
-
-          <button @click.stop.prevent="deleteTodo(todo)">I</button>
-        </div>
-      </div>
+        :todo="todo"
+        @afterDeleting="afterDeleting(todo)"
+      />
     </div>
     <!--/ Todos container -->
   </div>
@@ -54,12 +44,15 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import Spinner from "@/components/utils/Spinner.vue";
+import TodoCard from "@/components/Todos/TodoCard.vue";
+
 export default {
   name: "Home",
   components: {
     ValidationObserver,
     ValidationProvider,
     Spinner,
+    TodoCard,
   },
   created() {
     this.getTodos();
@@ -80,7 +73,10 @@ export default {
       this.$axios
         .get("/v1/todos")
         .then((response) => {
-          this.todos = response.data.data;
+          this.todos = response.data.data.map((todo) => ({
+            ...todo,
+            state: "show",
+          }));
         })
         .catch((error) => {})
         .finally(() => {
@@ -104,32 +100,17 @@ export default {
       this.$axios
         .post("/v1/todos", payload)
         .then((response) => {
-          this.todos.unshift(response.data.data);
+          this.todos.unshift({ ...response.data.data, state: "show" });
           this.newTodo = "";
         })
         .catch((error) => {});
     },
 
-    updateTodo(todo) {
-      if (!todo.title) return;
-
-      const payload = {
-        title: todo.title,
-      };
-
-      this.$axios
-        .put(`/v1/todos/${todo.id}`, payload)
-        .then((response) => {})
-        .catch((error) => {});
-    },
-
-    deleteTodo(todo) {
-      this.$axios.delete(`/v1/todos/${todo.id}`).then((response) => {
-        const indexTodoToRemove = this.todos.findIndex(
-          (todoIterate) => todoIterate.id === todo.id
-        );
-        this.todos.splice(indexTodoToRemove, 1);
-      });
+    afterDeleting(todo) {
+      const indexTodoToRemove = this.todos.findIndex(
+        (todoIterate) => todoIterate.id === todo.id
+      );
+      this.todos.splice(indexTodoToRemove, 1);
     },
   },
 };
