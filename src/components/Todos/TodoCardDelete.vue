@@ -7,7 +7,7 @@
         <div class="flex items-center">
             <a
                 href=""
-                class="text-xs text-slate-50 mr-2 focus:outline-none"
+                class="text-xs text-slate-50 mr-2 focus:outline-none  hover:underline"
                 @click.stop.prevent="onCancel()"
             >
                 Cancelar
@@ -15,7 +15,7 @@
 
             <button
                 type="submit"
-                class="bg-red-700 text-red-100 text-xs font-semibold px-2.5 py-1 rounded focus:outline-none"
+                class="bg-red-800 text-red-100 text-xs font-semibold px-2.5 py-1 rounded focus:outline-none"
                 @click.stop.prevent="onDelete()"
             >
                 SIM
