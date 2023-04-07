@@ -19,7 +19,7 @@
     </div>
 
     <div class="ml-auto flex items-center justify-center">
-      <button class="focus:outline-none">
+      <button class="focus:outline-none" @click.stop.prevent="deleteTodoTask">
         <svg
           class="ml-3 h-4 w-4 text-gray-500"
           viewBox="0 0 24 24"
@@ -67,6 +67,12 @@ export default {
       this.task.completed = !this.task.completed;
       this.$axios.put(`/v1/todo_tasks/${this.task.id}`, {
         completed: this.task.completed,
+      });
+    },
+
+    deleteTodoTask() {
+      this.$axios.delete(`/v1/todo_tasks/${this.task.id}`).then((response) => {
+        this.$emit("afterDeleting", this.task);
       });
     },
 

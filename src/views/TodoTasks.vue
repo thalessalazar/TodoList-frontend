@@ -61,6 +61,7 @@
           v-for="task in this.todo.tasks"
           :key="task.id"
           :task="task"
+          @afterDeleting="afterDeletingTask"
         />
       </div>
       <!--/ Todo items -->
@@ -134,6 +135,14 @@ export default {
           this.todo.tasks.unshift(response.data.data);
           this.newTodoTaskTitle = "";
         });
+    },
+
+    afterDeletingTask(task) {
+      const indexTask = this.todo.tasks.findIndex(
+        (item) => item.id === task.id
+      );
+
+      this.todo.tasks.splice(indexTask, 1);
     },
   },
 };
