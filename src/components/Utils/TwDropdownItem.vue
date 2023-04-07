@@ -41,7 +41,7 @@
             classList() {
                 return [
                     'group flex items-center',
-                    'block w-full px-4 py-2 text-sm leading-5 hover:bg-gray-100',
+                    'block w-full px-4 py-2 text-sm leading-5 hover:bg-gray-200',
                     'focus:outline-none focus:bg-gray-100',
                     this.getTextColorClass,
                 ];

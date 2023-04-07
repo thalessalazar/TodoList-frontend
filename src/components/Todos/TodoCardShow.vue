@@ -2,9 +2,12 @@
   <div
     class="flex items-center justify-between bg-gray-900 rounded-lg px-4 h-15 mb-2"
   >
-    <div class="text-slate-50 font-light truncate">
+    <RouterLink
+      :to="{ name: 'todo-tasks', params: { id: this.todo.id } }"
+      class="text-slate-50 font-light truncate"
+    >
       {{ todo.title }}
-    </div>
+    </RouterLink>
 
     <div class="flex items-center justify-center pl-3">
       <TwDropdown naked no-icon no-padding>
@@ -35,7 +38,7 @@
               />
             </svg>
             Editar
-        </div>
+          </div>
         </TwDropdownItem>
 
         <TwDropdownItem @click="onDelete()">
@@ -65,12 +68,14 @@
 <script>
 import TwDropdown from "@/components/Utils/TwDropdown.vue";
 import TwDropdownItem from "@/components/Utils/TwDropdownItem.vue";
+import { RouterLink } from "vue-router";
 
 export default {
   name: "TodoCardShow",
   components: {
     TwDropdown,
     TwDropdownItem,
+    RouterLink,
   },
   props: {
     todo: {
