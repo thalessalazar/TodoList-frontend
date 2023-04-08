@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-between bg-gray-900 rounded-lg px-4 h-15 mb-2"
+    class="flex items-center justify-between bg-gray-900 rounded-lg px-4 h-15 mb-2 hover:bg-blue-500 transition-all hover:shadow-md"
   >
     <RouterLink
       :to="{ name: 'todo-tasks', params: { id: this.todo.id } }"
