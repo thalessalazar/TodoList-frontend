@@ -16,6 +16,7 @@ import ResetPassword from "@/views/ResetPassword.vue";
 import Security from "@/views/Security.vue";
 import Logout from '@/views/Logout.vue';
 import TodoTasks from "@/views/TodoTasks.vue";
+import Finances from '@/views/Finances.vue';
 
 // middlewares
 import Guard from "@/service/middleware";
@@ -31,7 +32,8 @@ const routes = [
       { path: "", name: "index", component: Home },
       { path: "profile", name: "profile", component: Profile },
       { path: "security", name: "security", component: Security },
-      { path: "todo/:id", name: "todo-tasks", component: TodoTasks }
+      { path: "todo/:id", name: "todo-tasks", component: TodoTasks },
+      { path: "finances", name: "finances", component: Finances }
     ]
   },
   {
