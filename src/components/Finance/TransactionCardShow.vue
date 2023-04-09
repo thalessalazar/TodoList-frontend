@@ -1,15 +1,20 @@
 <template>
   <div
-    class="flex items-center justify-between bg-gray-900 rounded-lg px-4 h-15 mb-2 border-l-4 border-l-green-400"
+    :class="`flex items-center justify-between bg-gray-900 rounded-lg px-4 h-15 mb-2 border-l-4 ${borderClass}`"
   >
-    <span class="text-slate-50 font-light truncate">
-      {{ transaction.title }}
-    </span>
+    <div class="text-slate-50 truncate text-base font-medium">
+      <div>
+        {{ transaction.title }}
+      </div>
+      <div class="font-light text-xs">
+        {{ dateFormated }}
+      </div>
+    </div>
 
-    <span class="text-slate-50 ">
-      <template v-if="type === 'REVENUE'"> + </template>
+    <span class="text-slate-50 font-bold">
+      <template v-if="isRevenue"> + </template>
       <template v-else> - </template>
-      R$ {{ transaction.value }}
+      R$ {{ transactionValue }}
     </span>
   </div>
 </template>
@@ -34,6 +39,33 @@ export default {
   },
   data() {
     return {};
+  },
+  computed: {
+    transactionValue() {
+      return this.transaction.value.toFixed(2);
+    },
+    borderClass() {
+      const variants = {
+        REVENUE: "border-l-green-400",
+        EXPENSE: "border-l-rose-500",
+      };
+
+      return variants[this.transaction.type];
+    },
+    isRevenue() {
+      return this.transaction.type === "REVENUE";
+    },
+    isExpense() {
+      return this.transaction.type === "EXPENSE";
+    },
+    dateFormated() {
+      const event = new Date(this.transaction.date);
+      return event.toLocaleDateString("pt-BR", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      });
+    },
   },
   methods: {
     onDelete() {
