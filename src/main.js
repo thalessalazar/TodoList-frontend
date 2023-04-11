@@ -7,6 +7,11 @@ import './plugins/vee-validate';
 import './plugins/axios';
 import './assets/css/tailwind.css';
 
+import Vuesax from "vuesax";
+import 'vuesax/dist/vuesax.css';
+
+Vue.use(Vuesax);
+
 new Vue({
   router,
   store,
