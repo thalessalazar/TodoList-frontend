@@ -2,7 +2,7 @@
   <button
     type="submit"
     :disabled="this.isloading"
-    :class="`flex items-center justify-center ${colorComputed} rounded:lg font-medium text-sm focus:outline-none rounded:lg py-3 px-4 block w-full appearance-none leading-normal`"
+    :class="`flex items-center justify-center rounded-lg ${colorComputed} font-medium text-sm focus:outline-none py-3 px-4 block w-full`"
   >
     <img
       v-if="this.isloading"

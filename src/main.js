@@ -10,6 +10,8 @@ import './assets/css/tailwind.css';
 import Vuesax from "vuesax";
 import 'vuesax/dist/vuesax.css';
 
+import './plugins/toast';
+
 Vue.use(Vuesax);
 
 new Vue({

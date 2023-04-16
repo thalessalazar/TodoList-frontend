@@ -10,6 +10,24 @@
       :color="response.color"
     />
 
+    <div class="flex justify-center mb-8">
+      <img
+        class="w-40 h-40 rounded-full"
+        :src="this.user.image_profile"
+        alt=""
+      />
+      <div
+        class="w-40 h-40 group hover:bg-blue-500 opacity-60 rounded-full absolute flex justify-center items-center cursor-pointer transition duration-200"
+        @click.stop.prevent="openFileSelect"
+      >
+        <img
+          class="hidden group-hover:block w-7"
+          src="https://www.svgrepo.com/show/33565/upload.svg"
+          alt=""
+        />
+      </div>
+    </div>
+
     <ValidationObserver
       ref="profileForm"
       tag="form"
@@ -34,7 +52,7 @@
             v-model="firstName"
             type="text"
             placeholder="Digite seu nome"
-            class="bg-gray-900 placeholder-gray-700 text-gray-500 font-light border border-gray-900 focus:outline-none focus:border-blue-800 rounded:lg py-3 px-4 block w-full appearance-none leading-normal"
+            class="bg-gray-900 placeholder-gray-700 text-gray-500 font-light rounded-lg border border-gray-900 focus:outline-none focus:border-blue-800 rounded:lg py-3 px-4 block w-full appearance-none leading-normal"
           />
 
           <FormFeedBackFieldError :error="errors[0]" />
@@ -58,12 +76,12 @@
             v-model="lastName"
             type="text"
             placeholder="Digite seu sobrenome"
-            class="bg-gray-900 placeholder-gray-700 text-gray-500 font-light border border-gray-900 focus:outline-none focus:border-blue-800 rounded:lg py-3 px-4 block w-full appearance-none leading-normal"
+            class="bg-gray-900 placeholder-gray-700 text-gray-500 font-light rounded-lg border border-gray-900 focus:outline-none focus:border-blue-800 rounded:lg py-3 px-4 block w-full leading-normal"
           />
           <FormFeedBackFieldError :error="errors[0]" />
         </ValidationProvider>
 
-        <div class="col-span-2 text-right">
+        <div class="col-span-2 rounded-lg">
           <LoadingButton
             :isloading="this.spinner.update_user"
             :text="'SALVAR'"
@@ -105,6 +123,7 @@ export default {
 
   data() {
     return {
+      file: null,
       firstName: "",
       lastName: "",
       response: {
@@ -113,6 +132,7 @@ export default {
       },
       spinner: {
         update_user: false,
+        update_image_profile: false,
       },
     };
   },
@@ -147,6 +167,40 @@ export default {
     },
     setUpdateUserSpinner(flag) {
       this.spinner.update_user = flag;
+    },
+    setUpdateImageProfile(flag) {
+      this.update_image_profile = flag;
+    },
+    openFileSelect() {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.onchange = (e) => {
+        this.file = e.target.files[0];
+        this.uploadFile();
+      };
+      input.click();
+    },
+    uploadFile() {
+      this.setUpdateImageProfile(true);
+      const formData = new FormData();
+      formData.append("image_profile", this.file);
+      this.$axios
+        .post("/v1/me/update-image-profile", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((response) => {
+          const user = response.data.data;
+          this.$store.commit("user/STORE_USER", user);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response.status === 422) {
+            this.$toast.error(error.response.data.message);
+          }
+        })
+        .finally(() => {
+          this.setUpdateImageProfile(false);
+        });
     },
   },
 };
